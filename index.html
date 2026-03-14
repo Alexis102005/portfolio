@@ -19,12 +19,21 @@
             color: white;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            transition: 0.3s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-
+        .card-inner {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    background: white;
+    height: 100%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+.card-inner:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    cursor: pointer;
+}
+.card-inner.bg-light {
+    background: #f8f9fa !important;
+}
         
         .skill-badge {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -36,13 +45,58 @@
             font-weight: 600;
         }
 
-        .navbar { background: rgba(0,0,0,0.1) !important; }
+        .navbar {
+    transition: all 0.3s ease;
+    background: transparent !important;
+}
+.navbar.scrolled {
+    background: #2d3436 !important;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}.flip-container {
+    perspective: 1000px;
+    height: 280px;
+    cursor: pointer;
+}
+.flip-front, .flip-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    transition: transform 0.6s ease;
+}
+.flip-container {
+    position: relative;
+}
+.flip-front {
+    background: white;
+    transform: rotateY(0deg);
+}
+.flip-back {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    transform: rotateY(180deg);
+}
+.flip-container.flipped .flip-front {
+    transform: rotateY(-180deg);
+}
+.flip-container.flipped .flip-back {
+    transform: rotateY(0deg);
+}
     </style>
 </head>
 <body>
 
 
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">Alexis.dev</a>
             <div class="navbar-nav ms-auto">
@@ -64,31 +118,39 @@
 
     <section id="projets" class="py-5">
         <div class="container">
-            <h2 class="text-center fw-bold mb-5">Mes Projets</h2>
+            <h2 class="text-center fw-bold mb-5 fade-in">Mes Projets</h2>
             <div class="row g-4">
 
-                <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow">
-                        <div class="card-body p-4">
-                            <div class="mb-3 fs-2">📒</div>
-                            <h5 class="card-title fw-bold">Répertoire de Contacts</h5>
-                            <p class="card-text text-muted">Gestionnaire de contacts complet construit en 4 technologies : C, Python/Flask, HTML/JS et React Native.</p>
-                            <div class="mt-3">
-                                <span class="badge bg-dark me-1">C</span>
-                                <span class="badge bg-primary me-1">Python</span>
-                                <span class="badge bg-success me-1">Flask</span>
-                                <span class="badge bg-warning text-dark me-1">SQLite</span>
-                                <span class="badge bg-info text-dark">React Native</span>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent border-0 p-4">
-                            <a href="https://github.com/Alexis102005/repertoire-contacts" target="_blank" class="btn btn-dark rounded-pill">Voir sur GitHub</a>
-                        </div>
-                    </div>
+                <div class="col-md-6 fade-in">
+    <div class="flip-container">
+    
+        <div class="flip-front card-inner shadow">
+            <div class="card-body p-4">
+                <div class="mb-3 fs-2">📒</div>
+                <h5 class="fw-bold">Répertoire de Contacts</h5>
+                <p class="text-muted">Gestionnaire de contacts complet construit en 4 technologies.</p>
+                <p class="text-muted fst-italic mt-3">Cliquez pour voir les détails →</p>
+            </div>
+        </div>
+    
+        <div class="flip-back shadow">
+            <div class="p-4 d-flex flex-column justify-content-center h-100">
+                <h5 class="fw-bold text-white mb-3">Technologies utilisées</h5>
+                <div class="mb-3">
+                    <span class="badge bg-light text-dark me-1 mb-1">C</span>
+                    <span class="badge bg-light text-dark me-1 mb-1">Python</span>
+                    <span class="badge bg-light text-dark me-1 mb-1">Flask</span>
+                    <span class="badge bg-light text-dark me-1 mb-1">SQLite</span>
+                    <span class="badge bg-light text-dark me-1 mb-1">React Native</span>
                 </div>
+                <a href="https://github.com/Alexis102005/repertoire-contacts" target="_blank" class="btn btn-light rounded-pill mt-2">Voir sur GitHub</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow bg-light">
+                <div class="col-md-6 fade-in">
+                    <div class="card-inner h-100 border-0 shadow bg-light ">
                         <div class="card-body p-4 d-flex align-items-center justify-content-center">
                             <p class="text-muted fst-italic">Prochain projet à venir...</p>
                         </div>
@@ -131,5 +193,35 @@
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('mainNav');
+        if (window.scrollY > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+
+    const fadeElems = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const idx = Number(entry.target.dataset.fadeIndex || 0);
+            setTimeout(() => entry.target.classList.add('visible'), idx * 100);
+            obs.unobserve(entry.target);
+        });
+    }, { threshold: 0.15 });
+
+    fadeElems.forEach((el, index) => {
+        el.dataset.fadeIndex = index;
+        observer.observe(el);
+    });
+    document.querySelectorAll('.flip-container').forEach(card => {
+    card.addEventListener('click', () => {
+        card.classList.toggle('flipped');
+    });
+});
+</script>
 </body>
 </html>
